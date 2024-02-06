@@ -5,6 +5,7 @@ import calendar
 
 sg.theme("Default")
 
+#  選択肢の作成
 categoeyChoices = ["片道", "往復", "--"]
 seikyuChoices = ["なし", "あり"]
 reasonChoices = ["通勤費(通常勤務地)",
@@ -20,6 +21,7 @@ reasonChoices = ["通勤費(通常勤務地)",
                  "その他※要備考入力"]
 wayChoices = ["--", "電車（国内）", "バス（国内）", "その他※原則使用不可"]
 
+#  画面の作成
 layout = [[sg.Text("  楽々清算用CSVファイル作成アプリ", font=(None,30))],
           [sg.Text()],
           [sg.Text("      作成する年月を指定してください（yyyy/mm）*")],
@@ -48,6 +50,7 @@ layout = [[sg.Text("  楽々清算用CSVファイル作成アプリ", font=(None
 
 win = sg.Window("楽々清算CSV作成アプリ", layout, font=(None, 14), size=(700,850))
 
+# 祝日かを判定する
 def isBizDay(date):
     date = datetime.date(int(date[0:4]), int(date[4:6]), int(date[6:8]))
     if date.weekday() >= 5 or jpholiday.is_holiday(date):
@@ -55,6 +58,7 @@ def isBizDay(date):
     else:
         return 1
 
+# csv作成
 def createCsv():
     date = value["date"]
     year = date[:4]
@@ -105,6 +109,7 @@ def createCsv():
 
     resultMsg()
 
+# 入力値のチェック
 def checkValue(date, seikyu, reason, amount):
     errCount = 0
     if not date:
@@ -122,6 +127,7 @@ def checkValue(date, seikyu, reason, amount):
             errCount += 1
     return errCount
 
+# 出力ファイルのチェック
 def checkFile(filePath):
     errCount = 0
     if not filePath:
@@ -129,12 +135,14 @@ def checkFile(filePath):
         errCount += 1
     return errCount
 
+# ファイルの設定
 def fileFormat(filePath):
     if filePath.find(".") == -1:
         filePath += ".csv"
         return filePath
     return filePath
 
+# 成功メッセージ
 def resultMsg():
     msg = "      csvが作成されました。"
     win["result"].update(msg)
